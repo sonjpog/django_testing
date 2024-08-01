@@ -57,7 +57,7 @@ def comment(author, news):
 
 
 @pytest.fixture
-def commets(author, news):
+def comments(author, news):
     all_comments = []
     for index in range(2):
         comment = Comment.objects.create(
