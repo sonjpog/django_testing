@@ -9,7 +9,7 @@ def test_home_page(client, news_10):
     url = reverse('news:home')
     response = client.get(url)
     object_list = response.context['object_list']
-    news_count = len(object_list)
+    news_count = object_list.count()
     assert news_count == settings.NEWS_COUNT_ON_HOME_PAGE
 
 

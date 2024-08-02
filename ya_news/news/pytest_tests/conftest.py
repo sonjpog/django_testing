@@ -1,9 +1,10 @@
-import pytest
 from datetime import timedelta
 
-from news.models import News, Comment
+import pytest
 from django.conf import settings
 from django.utils import timezone
+
+from news.models import News, Comment
 
 
 @pytest.fixture
@@ -30,11 +31,10 @@ def author_client(author, client):
 
 @pytest.fixture
 def news(author):
-    news = News.objects.create(
+    return News.objects.create(
         title='Заголовок',
         text='Текст заметки',
     )
-    return news
 
 
 @pytest.fixture
@@ -48,12 +48,11 @@ def news_10(author):
 
 @pytest.fixture
 def comment(author, news):
-    comment = Comment.objects.create(
+    return Comment.objects.create(
         news=news,
         author=author,
         text='Текст комментария'
     )
-    return comment
 
 
 @pytest.fixture
@@ -69,20 +68,3 @@ def comments(author, news):
         comment.save()
         all_comments.append(comment)
     return all_comments
-
-
-@pytest.fixture
-def id_news_for_args(news):
-    return news.id,
-
-
-@pytest.fixture
-def id_comment_for_args(comment):
-    return comment.id,
-
-
-@pytest.fixture
-def form_data():
-    return {
-        'text': 'Новый техт'
-    }

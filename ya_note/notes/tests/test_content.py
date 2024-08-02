@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
+from notes.forms import NoteForm
 from notes.models import Note
 
 
@@ -43,7 +44,7 @@ class TestNotesPage(TestCase):
         self.client.force_login(self.reader)
         response = self.client.get(self.NOTES_URL)
         object_list = response.context['object_list']
-        notes_count = len(object_list)
+        notes_count = object_list.count()
         self.assertEqual(notes_count, 0)
 
     def test_notes_count_for_author(self):
@@ -51,7 +52,7 @@ class TestNotesPage(TestCase):
         self.client.force_login(self.author)
         response = self.client.get(self.NOTES_URL)
         object_list = response.context['object_list']
-        notes_count = len(object_list)
+        notes_count = object_list.count()
         self.assertEqual(notes_count, self.NOTE_COUNT)
 
 
@@ -78,3 +79,4 @@ class TestAddAndEditPage(TestCase):
                 url = reverse(name, args=args)
                 response = self.client.get(url)
                 self.assertIn('form', response.context)
+                self.assertIsInstance(response.context['form'], NoteForm)
