@@ -26,13 +26,13 @@ def test_news_order(client, news_10):
     assert all_dates == sorted_dates
 
 
-def test_detail_page_contains_form(author_client, news, form_data):
+def test_detail_page_contains_form(author_client, news):
     """
     На странице отдельной новости для
     авторизованного пользователя отображается форма для отправки комментария.
     """
     url = reverse('news:detail', args=(news.id,))
-    response = author_client.get(url, data=form_data)
+    response = author_client.get(url)
     assert 'form' in response.context
     form = response.context['form']
     assert isinstance(form, CommentForm)

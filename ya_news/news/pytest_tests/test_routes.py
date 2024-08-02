@@ -12,7 +12,7 @@ from pytest_django.asserts import assertRedirects
         ('users:login', None),
         ('users:logout', None),
         ('users:signup', None),
-        ('news:detail', pytest.lazy_fixture('id_news_for_args')),
+        ('news:detail', None),
     ),
 )
 def test_pages_availability_for_anonymous_user(client, name, args, news):
@@ -67,8 +67,8 @@ def test_pages_availability_for_different_users(parametrized_client, name,
 @pytest.mark.parametrize(
     'name, args',
     (
-        ('news:delete', pytest.lazy_fixture('id_comment_for_args')),
-        ('news:edit', pytest.lazy_fixture('id_comment_for_args')),
+        ('news:delete', None),
+        ('news:edit', None),
     ),
 )
 def test_redirects(client, name, args):
