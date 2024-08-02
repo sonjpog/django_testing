@@ -1,6 +1,5 @@
 import pytest
 from http import HTTPStatus
-
 from django.urls import reverse
 from pytest_django.asserts import assertRedirects
 
@@ -12,7 +11,7 @@ from pytest_django.asserts import assertRedirects
         ('users:login', None),
         ('users:logout', None),
         ('users:signup', None),
-        ('news:detail', None),
+        ('news:detail', (1,)),
     ),
 )
 def test_pages_availability_for_anonymous_user(client, name, args, news):
@@ -34,9 +33,8 @@ def test_pages_availability_for_anonymous_user(client, name, args, news):
     ('news:delete', 'news:edit'),
 )
 def test_pages_availability_for_author(author_client, name, comment):
-    """Доступность страниц редактирования и"""
-    """удаления комментария для автора комментария."""
-
+    """Доступность страниц редактирования"""
+    """и удаления комментария для автора комментария."""
     url = reverse(name, args=(comment.id,))
     response = author_client.get(url)
     assert response.status_code == HTTPStatus.OK
@@ -56,8 +54,8 @@ def test_pages_availability_for_author(author_client, name, comment):
 def test_pages_availability_for_different_users(parametrized_client, name,
                                                 comment, expected_status):
     """
-    Доступность страниц редактирования и удаления комментария
-    для разных пользователей.
+    Доступность страниц редактирования и удаления
+    комментария для разных пользователей.
     """
     url = reverse(name, args=(comment.id,))
     response = parametrized_client.get(url)
@@ -67,15 +65,14 @@ def test_pages_availability_for_different_users(parametrized_client, name,
 @pytest.mark.parametrize(
     'name, args',
     (
-        ('news:delete', None),
-        ('news:edit', None),
+        ('news:delete', (1,)),
+        ('news:edit', (1,)),
     ),
 )
 def test_redirects(client, name, args):
     """
-    Перенаправление анонимного пользователя на страницу
-    логина при попытке доступа к страницам редактирования
-    или удаления комментария.
+    Перенаправление анонимного пользователя на страницу логина
+    при попытке доступа к страницам редактирования или удаления комментария.
     """
     login_url = reverse('users:login')
     url = reverse(name, args=args)
