@@ -1,6 +1,7 @@
 from http import HTTPStatus
 
-from pytest_django.asserts import assertRedirects, assertFormError
+from pytest_django.asserts import assertRedirects
+from django import forms
 from django.urls import reverse
 
 from news.models import Comment
@@ -31,14 +32,16 @@ def test_anonymous_user_cant_create_note(client, news):
     assert Comment.objects.count() == comments_count
 
 
-def test_user_cant_use_bad_words(author_client, news):
+def test_user_cant_use_bad_words(self):
     """Комментарий с запрещенными словами не будет опубликован."""
     comments_count = Comment.objects.count()
-    url = reverse('news:detail', args=(news.id,))
-    ['text'] = f'{BAD_WORDS[0]} текст'
-    response = author_client.post(url)
-    assertFormError(response, 'form', 'text', errors=WARNING)
-    assert Comment.objects.count() == comments_count
+    url = reverse('news:detail', args=(self.news.id,))
+    form_data = {'text': f'{BAD_WORDS[0]} текст'}
+    response = self.author_client.post(url, data=form_data)
+    form = response.context.get('form')
+    self.assertIsInstance(form, forms.ModelForm)
+    self.assertFormError(response, 'form', 'text', WARNING)
+    self.assertEqual(Comment.objects.count(), comments_count)
 
 
 def test_author_can_delete_comment(author_client, news, comment):
