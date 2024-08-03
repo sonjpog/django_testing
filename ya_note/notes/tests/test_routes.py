@@ -62,8 +62,8 @@ class TestRoutes(TestCase):
                 self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_availability_for_edit_delete_detail(self):
-        """Доступность страниц редактирования, удаления и деталей
-        для авторизованных пользователей."""
+        """Доступность страниц редактирования, удаления и деталей"""
+        """для авторизованных пользователей."""
         users_statuses = (
             (self.author, HTTPStatus.OK),
             (self.reader, HTTPStatus.NOT_FOUND),

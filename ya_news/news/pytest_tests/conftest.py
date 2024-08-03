@@ -85,6 +85,7 @@ def updated_comment_text():
 def bad_comment_text():
     return f'{BAD_WORDS[0]} текст'
 
+
 @pytest.fixture
 def new_comment_text():
     return 'new text'
