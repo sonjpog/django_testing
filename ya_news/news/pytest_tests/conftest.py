@@ -4,6 +4,7 @@ import pytest
 from django.conf import settings
 from django.utils import timezone
 
+from news.forms import BAD_WORDS
 from news.models import News, Comment
 
 
@@ -68,3 +69,22 @@ def comments(author, news):
         comment.save()
         all_comments.append(comment)
     return all_comments
+
+
+@pytest.fixture
+def comment_text():
+    return 'text'
+
+
+@pytest.fixture
+def updated_comment_text():
+    return 'updated text'
+
+
+@pytest.fixture
+def bad_comment_text():
+    return f'{BAD_WORDS[0]} текст'
+
+@pytest.fixture
+def new_comment_text():
+    return 'new text'

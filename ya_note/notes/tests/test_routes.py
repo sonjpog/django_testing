@@ -41,14 +41,8 @@ class TestRoutes(TestCase):
             ('notes:detail', (cls.note.slug,)),
         )
 
-        cls.redirect_urls = (
-            ('notes:edit', (cls.note.slug,)),
-            ('notes:delete', (cls.note.slug,)),
-            ('notes:detail', (cls.note.slug,)),
-            ('notes:list', None),
-            ('notes:success', None),
-            ('notes:add', None),
-        )
+        # Combine all urls that require redirect for anonymous user
+        cls.redirect_urls = cls.authorized_urls + cls.edit_delete_detail_urls
 
     def test_pages_availability(self):
         """Доступность общедоступных страниц."""
@@ -68,8 +62,8 @@ class TestRoutes(TestCase):
                 self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_availability_for_edit_delete_detail(self):
-        """Доступность страниц редактирования, удаления и деталей"""
-        """для авторизованных пользователей."""
+        """Доступность страниц редактирования, удаления и деталей
+        для авторизованных пользователей."""
         users_statuses = (
             (self.author, HTTPStatus.OK),
             (self.reader, HTTPStatus.NOT_FOUND),

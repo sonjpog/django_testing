@@ -47,11 +47,13 @@ class TestNoteCreation(TestCase):
         """Невозможно создать две заметки с одинаковым slug."""
         initial_notes_count = Note.objects.count()
         self.auth_client.post(self.url, data=self.form_data)
-        notes_count = Note.objects.count()
-        self.assertEqual(notes_count, initial_notes_count + 1)
+        notes_count_first_attempt = Note.objects.count()
+        self.assertEqual(notes_count_first_attempt,
+                         initial_notes_count + 1)
         self.auth_client.post(self.url, data=self.form_data)
-        notes_count_2 = Note.objects.count()
-        self.assertEqual(notes_count_2, initial_notes_count + 1)
+        notes_count_second_attempt = Note.objects.count()
+        self.assertEqual(notes_count_second_attempt,
+                         initial_notes_count + 1)
 
     def test_automatic_creation_slug(self):
         """При создании заметки, если не заполнен slug,"""
@@ -115,5 +117,5 @@ class TestNoteEditDelete(TestCase):
         response = self.reader_client.post(self.edit_url, data=self.form_data)
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
         self.note.refresh_from_db()
-        self.assertEqual(self.note.text, 'Текст')
-        self.assertEqual(self.note.title, 'Заголовок')
+        self.assertEqual(self.note.text, self.expected_text)
+        self.assertEqual(self.note.title, self.expected_title)
