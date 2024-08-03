@@ -72,7 +72,7 @@ def test_user_cant_delete_comment_of_another_user(reader_client, comment):
     assert Comment.objects.count() == comments_count
 
 
-def test_user_cant_edit_comment_of_another_user(reader_client, comment, 
+def test_user_cant_edit_comment_of_another_user(reader_client, comment,
                                                 new_comment_text):
     """Авторизованный пользователь не может редактировать чужой комментарий."""
     url = reverse('news:edit', args=(comment.id,))
